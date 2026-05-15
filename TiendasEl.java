@@ -41,6 +41,10 @@ public class Tiendas_el {
                     System.out.println("====================================================================================");
 
                     break;
+                case 5:
+                    System.out.println("Grasias por su compra");
+                    System.exit(0);
+                    break;
                 default:
                     System.out.println("Opcion invalida");
             }
