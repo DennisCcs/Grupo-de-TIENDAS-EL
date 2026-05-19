@@ -25,6 +25,7 @@ public class TIENDAS_EL {
                 case 3:
                     break;
                 case 4:
+                    precio=accesorio(sc);
                     break;
                 case 5:
                     System.out.println("Gracias por su compra");
@@ -113,8 +114,68 @@ public class TIENDAS_EL {
     public static void ropaInterior(Scanner sc) {
         System.out.println("=== ROPA INTERIOR ===");
     }
-    public static void accesorios(Scanner sc) {
+    public static dooble accesorios(Scanner sc) {
         System.out.println("=== ACCESORIOS ===");
+        System.out.println("1: MOCHILA EDWARD 3MCHD047 NEGRO (DONATELLI) S/ 99.90");
+        System.out.println("2: CORBATA MICHI (DONATELLI) S/ 29.99" );
+        System.out.println("3: CORBATERO PLATA (DONATELLI) S/ 14.90");
+        System.out.println("4: TIRANTE LIAM NEGRO (JOHN HOLDEN) S/ 79.90");
+        System.out.println("5: CORREA 3BPF0024 MARRON/NEGRO (DONATELLI) S/ 44.90");
+        System.out.println("6: CORREA 3BPD0012 REVERSIBLE NEGRO/MARRÓN (DONATELLI) S/ 59.90");
+        System.out.println("7: RELOJ METAL 3WDCM704 SILVER (DONATELLI) S/ 75.90");
+        System.out.println("8: RELOJ PU VALERIO NEGRO (JOHN HOLDEN) S/ 99.90");
+        System.out.println("9: RELOJ PU OSCAR MARRON OSCURO (JOHN HOLDEN) S/ 99.90");
+        System.out.println("10: RELOJ METAL DUSTIN SILVER (JOHN HOLDEN) S/ 99.90");
+        System.out.println("====================================================================================");
+        int opcion= sc.nextInt();
+        String color;
+        double precio=0;
+        switch (opcion){
+            case 1:
+                precio=99.90;
+                break;
+            case 2:
+                System.out.println("SELCCIONE EL COLOR");
+                System.out.println("VINO");
+                System.out.println("AZUL");
+                System.out.println("NEGRO");
+                color= sc.next();
+                if (color.equalsIgnoreCase("vino")||color.equalsIgnoreCase("azul")||color.equalsIgnoreCase("negro")){
+                    System.out.println("SU COLOR ELEGIDO ES: "+color);
+                }else {
+                    System.out.println("ESA OPCION NO ESTA DISPONIBLE");
+                }
+                precio=29.99;
+                break;
+            case 3:
+                precio=14.90;
+                break;
+            case 4:
+                precio=79.90;
+                break;
+            case 5:
+                precio=44.90;
+                break;
+            case 6:
+                precio=59.90;
+                break;
+            case 7:
+                precio=75.90;
+                break;
+            case 8:
+                precio=99.90;
+                break;
+            case 9:
+                precio=99.90;
+                break;
+            case 10:
+                precio=99.90;
+                break;
+            default:
+                System.out.println("OPCION INVALIDA");
+                System.exit(0);
+        }
+        return precio;
     }
     public static double comprar(double precio, int cantidad) {
         double sub_total;
