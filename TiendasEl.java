@@ -2,12 +2,12 @@ import java.util.Scanner;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Random;
 public class TIENDAS_EL_1 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int opcion=0;
         menupricipal(sc);
-        seleccionmetodoP(sc,opcion);
+
     }
     public  static void menupricipal(Scanner sc){
         boolean acceso;
@@ -16,11 +16,11 @@ public class TIENDAS_EL_1 {
         String contraGuardado = "";
 
         while (true){
-            System.out.println("Bienvenido a TIEDAS El");
-            System.out.println("Iniciar session");
-            System.out.println("Registrarse");
-            System.out.println("continuar como invitado");
-            System.out.println("Salir");
+            System.out.println("====Bienvenido a TIEDAS El====");
+            System.out.println("1.-Iniciar session");
+            System.out.println("2.-Registrarse");
+            System.out.println("3.-continuar como invitado");
+            System.out.println("4.-Salir");
             opciones = sc.nextInt();
             switch (opciones){
                 case 1:
@@ -39,6 +39,8 @@ public class TIENDAS_EL_1 {
                     categorias(sc);
                     break;
                 case 4:
+                    System.out.println("gracias por su visita");
+                    System.exit(0);
                     return;
                 default:
                     System.out.println("Opcion invalida");
@@ -64,7 +66,6 @@ public class TIENDAS_EL_1 {
         }
 
     }
-
     public static String registrarCorreo(Scanner sc){
         String cooreo;
         boolean registroExitoso = false;
@@ -99,9 +100,10 @@ public class TIENDAS_EL_1 {
     }
     public static void categorias(Scanner sc){
         String NombreMetodoP;
-        String producto ;
-        double precio ;
-        String talla;
+        String producto ="";
+        double precio =0;
+        String talla="";
+        double total=0;
         System.out.println("---- CATEGORIAS ----");
         System.out.println("1.- Formal");
         System.out.println("2.- Casual");
@@ -122,13 +124,26 @@ public class TIENDAS_EL_1 {
                 System.out.println("precio "+precio);
                 System.out.println("producto "+producto);
                 talla = talla(sc);
-                double subTotal = subTotal(sc,precio);
+                total = subTotal(sc,precio);
 
-                System.out.println("total a pagar es: "+subTotal);
+                System.out.println("total a pagar es: "+total);
                 break;
             case 3:
                 break;
             case 4:
+                int opcionACCESORIO=accesorios(sc);
+                producto=productoACCESORIO(opcionACCESORIO);
+                precio=precioACCESORIO(sc,opcionACCESORIO);
+
+                if (precio == 0){
+                    return;
+                }
+                System.out.println("precio "+precio);
+                System.out.println("producto "+producto);
+                talla = talla(sc);
+                total = subTotal(sc,precio);
+
+                System.out.println("total a pagar es: "+total);
                 break;
             case 5:
                 System.out.println("gracias por su visita");
@@ -136,6 +151,21 @@ public class TIENDAS_EL_1 {
                 break;
             default:
                 System.out.println("Opcion invalida");
+        }
+        if (total>0) {
+            int metodoP=seleccionmetodoP(sc,total,producto,talla);
+            String metodoPAGO=nombreMetodoPago(metodoP);
+            int metodo = seleccionmetodoP(sc,total,producto,talla);
+            switch (metodo){
+                case 1:
+                    pagoEfectivo(sc,total,producto,talla);
+                    break;
+                case 2:
+                    pagoTARJETA(sc, total,producto,talla);
+                    break;
+                default:
+                    System.out.println("METODO INVALIDO");
+            }
         }
     }
     public static int casual(Scanner sc){
@@ -246,6 +276,112 @@ public class TIENDAS_EL_1 {
         }
         return producto;
     }
+    public static int accesorios(Scanner sc){
+        System.out.println("===ACCESORIOS===");
+        System.out.println("1: MOCHILA EDWARD 3MCHD047 NEGRO (DONATELLI) S/ 99.90");
+        System.out.println("2: CORBATA MICHI (DONATELLI) S/ 29.99" );
+        System.out.println("3: CORBATERO PLATA (DONATELLI) S/ 14.90");
+        System.out.println("4: TIRANTE LIAM NEGRO (JOHN HOLDEN) S/ 79.90");
+        System.out.println("5: CORREA 3BPF0024 MARRON/NEGRO (DONATELLI) S/ 44.90");
+        System.out.println("6: CORREA 3BPD0012 REVERSIBLE NEGRO/MARRÓN (DONATELLI) S/ 59.90");
+        System.out.println("7: RELOJ METAL 3WDCM704 SILVER (DONATELLI) S/ 75.90");
+        System.out.println("8: RELOJ PU VALERIO NEGRO (JOHN HOLDEN) S/ 99.90");
+        System.out.println("9: RELOJ PU OSCAR MARRON OSCURO (JOHN HOLDEN) S/ 99.90");
+        System.out.println("10: RELOJ METAL DUSTIN SILVER (JOHN HOLDEN) S/ 99.90");
+        System.out.println("====================================================================================");
+        int opcion= sc.nextInt();
+        return opcion;
+    }
+    public static double precioACCESORIO(Scanner sc, int opcion){
+        double precio=0;
+        String color;
+        switch (opcion){
+            case 1:
+                precio=99.90;
+                break;
+            case 2:
+                System.out.println("SELCCIONE EL COLOR");
+                System.out.println("VINO");
+                System.out.println("AZUL");
+                System.out.println("NEGRO");
+                color= sc.next();
+                if (color.equalsIgnoreCase("vino")||color.equalsIgnoreCase("azul")||color.equalsIgnoreCase("negro")){
+                    System.out.println("SU COLOR ELEGIDO ES: "+color);
+                }else {
+                    System.out.println("ESA OPCION NO ESTA DISPONIBLE");
+                }
+                precio=29.99;
+                break;
+            case 3:
+                precio=14.90;
+                break;
+            case 4:
+                precio=79.90;
+                break;
+            case 5:
+                precio=44.90;
+                break;
+            case 6:
+                precio=59.90;
+                break;
+            case 7:
+                precio=75.90;
+                break;
+            case 8:
+                precio=99.90;
+                break;
+            case 9:
+                precio=99.90;
+                break;
+            case 10:
+                precio=99.90;
+                break;
+            default:
+                System.out.println("OPCION INVALIDA");
+                System.exit(0);
+        }
+        System.out.println("LA CANTIDAD ES DE: "+precio);
+        return precio;
+    }
+    public static String productoACCESORIO(int opcion){
+        String producto="";
+        switch (opcion){
+            case 1:
+                producto = "MOCHILA EDWARD 3MCHD047 NEGRO (DONATELLI)";
+                break;
+            case 2:
+                producto ="CORBATA MICHI (DONATELLI)";
+                break;
+            case 3:
+                producto ="CORBATERO PLATA (DONATELLI)";
+                break;
+            case 4:
+                producto ="TIRANTE LIAM NEGRO (JOHN HOLDEN)";
+                break;
+            case 5:
+                producto ="CORREA 3BPF0024 MARRON/NEGRO (DONATELLI)";
+                break;
+            case 6:
+                producto ="CORREA 3BPD0012 REVERSIBLE NEGRO/MARRÓN (DONATELLI)";
+                break;
+            case 7:
+                producto ="RELOJ METAL 3WDCM704 SILVER (DONATELLI)";
+                break;
+            case 8:
+                producto ="RELOJ PU VALERIO NEGRO (JOHN HOLDEN)";
+                break;
+            case 9:
+                producto ="RELOJ PU OSCAR MARRON OSCURO (JOHN HOLDEN)";
+                break;
+            case 10:
+                producto ="RELOJ METAL DUSTIN SILVER (JOHN HOLDEN)";
+                break;
+            default:
+                System.out.println("Opcion invalida");
+                break;
+        }
+        return producto;
+    }
     public static double subTotal(Scanner sc,double precio){
         System.out.println("Ingrese la cantidad");
         int cantidad = sc.nextInt();
@@ -274,15 +410,18 @@ public class TIENDAS_EL_1 {
         }
         return talla;
     }
-    public static int seleccionmetodoP(Scanner sc,int opcion){
+    public static int seleccionmetodoP(Scanner sc,double total,String producto,String talla){
+        int opcion;
         System.out.println("selccione el metodo de pago");
         System.out.println("1: efectivo");
         System.out.println("2: tarjeta");
         opcion = sc.nextInt();
         switch (opcion){
             case 1:
+                pagoEfectivo(sc,total,producto,talla);
                 break;
             case 2:
+                pagoTARJETA(sc, total,producto,talla);
                 break;
             default:
                 System.out.println("Opcion invalida");
@@ -301,9 +440,14 @@ public class TIENDAS_EL_1 {
         }
         return metodoPago;
     }
-    public static void pagoTARJETA(Scanner sc,double total){
+    public static void pagoTARJETA(Scanner sc,double total,String producto,String talla){
+        double igv;
+        double subTotal;
+        double vuelto = 0;
+        double monto = total;
+        sc.nextLine();
         String nomTARJETA,fecVENCIMIENTO,cvv,numTARJETA;
-        boolean paAPROBADO;
+        boolean paAPROBADO=false;
         System.out.println("el monto a pagar es de: "+total);
         do{
             System.out.println("INGRESAR EL NOMBRE SE DU TARJETA (Visa, Mastercard, American Express, Diners Club)");
@@ -315,30 +459,104 @@ public class TIENDAS_EL_1 {
             fecVENCIMIENTO= sc.nextLine();
             System.out.println("INGRESAR CVV");
             cvv = sc.nextLine();
+            Random numrandom=new Random();
+            int codigoPAGO=100000+numrandom.nextInt(900000);
             boolean tarjetaOK=(numTARJETA.length()==16);
             boolean cvvOK=(cvv.length()==3);
             boolean fechaESTRUCTURAok=(fecVENCIMIENTO.length()==5&&fecVENCIMIENTO.contains("/"));
             boolean fechaNOvencida=false;
             if (nomTARJETA.equalsIgnoreCase("visa")||nomTARJETA.equalsIgnoreCase("mastercard")||nomTARJETA.equalsIgnoreCase("american express")||nomTARJETA.equalsIgnoreCase("diners club")){
                 if (fechaESTRUCTURAok){
-
+                    try{
+                        DateTimeFormatter formateador=DateTimeFormatter.ofPattern("MM/yy");
+                        YearMonth fechaTARJETA=YearMonth.parse(fecVENCIMIENTO,formateador);
+                        YearMonth fechaACTUAL=YearMonth.now();
+                        if (fechaTARJETA.isAfter(fechaACTUAL)||fechaTARJETA.equals(fechaACTUAL)){
+                            fechaNOvencida=true;
+                        }
+                    }
+                    catch (DateTimeParseException e){
+                        fechaESTRUCTURAok=false;
+                    }
+                }
+                if (tarjetaOK&&fechaESTRUCTURAok&&fechaNOvencida&&cvvOK){
+                    System.out.println("AUTORIZANDO FONDOS...");
+                    System.out.println("TRANSACCION EXITOSA");
+                    igv = total * 0.18;
+                    subTotal = total - igv;
+                    boleta(total,igv,subTotal,monto,vuelto,producto,talla,codigoPAGO);
+                    paAPROBADO=true;
+                    System.exit(0);
+                }else {
+                    System.out.println("OPRECAION DENEGADA POR LA PASARELA BANCARIA");
+                }
+                if (!tarjetaOK){
+                    System.out.println("EL NUMERO DE SU TARJETA DEBE CONTENER 16 DIGITOS");
+                }
+                if (!fechaESTRUCTURAok){
+                    System.out.println("FORMATO DE FECHA INCORRECTO");
+                }
+                if (fechaESTRUCTURAok&&!fechaNOvencida){
+                    System.out.println("FECHA DESU TARJETA CADUCADA");
+                }
+                if (!cvvOK) {
+                    System.out.println("EL CVV DEBE TENER 3 DIJITOS");
                 }
             }else{
                 System.out.println("EL NOMBRE ES INCORRECTO O ESA TARJETA NO ES VALIDA");
             }
-        }while ()
+        }while (!paAPROBADO);
     }
     public static void pagoEfectivo(Scanner sc,double total,String producto,String talla){
-        double vuelto,igv,subTotal;
+        double vuelto=0,igv=0,subTotal=0;
+        Random numrandom=new Random();
+        int opcion;
+        int codigoPAGO=100000+numrandom.nextInt(900000);
+        System.out.println("SU CODIGO DE PAGO ES EL NUMERO: "+codigoPAGO);
+        System.out.println("RECOJA SU PEDIDO Y PAGUE CON ESE CODIGO");
         System.out.println("el monto a pagar es de: "+total);
         System.out.println("Ingrese el total a pagar");
         double monto = sc.nextDouble();
         if (monto>=total){
             vuelto = monto - total;
             igv = 0.18 * total;
-            subTotal = total
-
+            subTotal = total - igv;
+            do {
+                System.out.println("¿YA RECOGIO SU PEDIDO?");
+                System.out.println("1.- SI");
+                System.out.println("2.- NO");
+                opcion=sc.nextInt();
+                if (opcion==1){
+                    System.out.println("SU BOLETA ELECTRONICA");
+                    boleta(subTotal,total,igv,monto,vuelto,producto,talla,codigoPAGO);
+                    System.exit(0);
+                }else {
+                    System.out.println("RECOJA SU PEDIDO LO ANTES POSIBLE");
+                }
+            }while (opcion==2);
+        }else {
+            System.out.println("MONTO INCOMPLETO");
         }
+    }
+    public static void boleta(double subtotal,double total,double igv,double monto,double vuelto, String producto, String talla,int codigoPAGO){
+        System.out.println("------------------------------");
+        System.out.println("          TIENDAS ÉL          ");
+        System.out.println(" ROPA Y ACCESORIOS PARA VARÓN ");
+        System.out.println("------------------------------");
+        System.out.println("RUC: 20100123456");
+        System.out.println("BOLETA DE VENTA ELECTRÓNICA");
+        System.out.println("------------------------------");
+        System.out.println("CODIGO DE PAGO: "+codigoPAGO);
+        System.out.println("PRODUCTO: " + producto);
+        System.out.println("TALLA: " + talla);
+        System.out.println("MONTO DE PAGO: S/"+monto);
+        System.out.println("SUB TOTAL: S/ " + subtotal);
+        System.out.println("IGV: S/ " + igv);
+        System.out.println("VUELTO: S/ " + vuelto);
+        System.out.println("TOTAL: S/ " + total);
+        System.out.println("===============================");
+        System.out.println("   ¡GRACIAS POR SU COMPRA!");
+        System.out.println("===============================");
     }
 }
 
