@@ -3,7 +3,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Random;
-public class TIENDAS_EL_1 {
+public class Tiendas_el {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         menupricipal(sc);
@@ -32,7 +32,18 @@ public class TIENDAS_EL_1 {
                     break;
                 case 2:
                     correoGuardado = registrarCorreo(sc);
+                    if (correoGuardado.equalsIgnoreCase("N")){
+                        correoGuardado = "";
+                        System.out.println("Registro cancelado");
+                        break;
+                    }
                     contraGuardado = registroContrasenia(sc);
+                    if (contraGuardado.equalsIgnoreCase("N")){
+                        correoGuardado = "";
+                        contraGuardado = "";
+                        System.out.println("Registro cancelado");
+                        break;
+                    }
                     break;
                 case 3:
                     System.out.println("Modo invitado");
@@ -56,7 +67,7 @@ public class TIENDAS_EL_1 {
         correo = sc.nextLine();
         System.out.println("Ingrese su contraseña");
         contra = sc.nextLine();
-        if (contra.equals(miContra) && correo.equals(miCorreo)) {
+        if (contra.equals(miContra) && correo.equals(miCorreo) && !contra.equalsIgnoreCase("")) {
             System.out.println("Inicio de seccion extitosa");
             return true;
         }
@@ -76,6 +87,14 @@ public class TIENDAS_EL_1 {
             boolean estructuraCorreo = cooreo.contains("@") && cooreo.endsWith(".com");
             if (!estructuraCorreo){
                 System.out.println("El correo debe contener @ y terminar en . com");
+                System.out.println("desea continuar S / N");
+                cooreo = sc.nextLine();
+                if (cooreo.equalsIgnoreCase("S")){
+                    continue;
+                } else if (cooreo.equalsIgnoreCase("N")) {
+                    return cooreo;
+
+                }
             } else if (estructuraCorreo) {
                 registroExitoso = true;
             }
@@ -91,6 +110,14 @@ public class TIENDAS_EL_1 {
             boolean estructuraContra = contra.length()>=8 && (contra.contains("@") || contra.contains("#"));
             if (!estructuraContra){
                 System.out.println("La contraseña debe tener minimo 8 caracteres y uno de estos caracteres especiales: # @)");
+                System.out.println("desea continuar S / N");
+                contra = sc.nextLine();
+                if (contra.equalsIgnoreCase("S")){
+                    continue;
+                } else if (contra.equalsIgnoreCase("N")) {
+                    return contra;
+
+                }
             } else if (estructuraContra) {
                 registroExitoso = true;
             }
@@ -99,7 +126,6 @@ public class TIENDAS_EL_1 {
         return contra;
     }
     public static void categorias(Scanner sc){
-        String NombreMetodoP;
         String producto ="";
         double precio =0;
         String talla="";
@@ -113,6 +139,18 @@ public class TIENDAS_EL_1 {
         int opocion = sc.nextInt();
         switch (opocion){
             case 1:
+                int opcionPruducto = formal(sc);
+                producto = productoFormal(opcionPruducto);
+                precio = precioFormal(sc,opcionPruducto);
+                if (precio == 0){
+                    return;
+                }
+                System.out.println("precio "+precio);
+                System.out.println("producto "+producto);
+                talla = talla(sc);
+                total = subTotal(sc,precio);
+
+                System.out.println("total a pagar es: "+total);
                 break;
             case 2:
                 int opcionPreoducto = casual(sc);
@@ -153,20 +191,116 @@ public class TIENDAS_EL_1 {
                 System.out.println("Opcion invalida");
         }
         if (total>0) {
-            int metodoP=seleccionmetodoP(sc,total,producto,talla);
-            String metodoPAGO=nombreMetodoPago(metodoP);
-            int metodo = seleccionmetodoP(sc,total,producto,talla);
+            int metodo = seleccionmetodoP(sc);
+            String metodoPAGO=nombreMetodoPago(metodo);
             switch (metodo){
                 case 1:
-                    pagoEfectivo(sc,total,producto,talla);
+                    pagoEfectivo(sc,total,producto,talla,metodoPAGO);
                     break;
                 case 2:
-                    pagoTARJETA(sc, total,producto,talla);
+                    pagoTARJETA(sc, total,producto,talla,metodoPAGO);
                     break;
                 default:
                     System.out.println("METODO INVALIDO");
             }
         }
+    }
+    public static int formal(Scanner sc) {
+        int opcion;
+        System.out.println("1.- TERNO DANE II AZUL JOHN HOLDEN S/ 599.90");
+        System.out.println("2.- TERNO NERO JOHN HOLDEN S/ 349.00");
+        System.out.println("3.- TERNO ALFRED MINIMATE NEGRO DONATELLI S/ 299.90");
+        System.out.println("4.- CAMISA ALESSANDRO NEGRO DONATELLI S/ 49.90");
+        System.out.println("5.- CAMISA MILEY COMFORT ROSADO JOHN HOLDEN S/ 169.90");
+        System.out.println("6.- CAMISA ML VANCOUVER 100% ALGODÓN BLANCO VAN HEUSEN S/ 279.90");
+        System.out.println("7.- SACO PAOLO CORDUROY AZUL MARINO DONATELLI S/ 249.90");
+        System.out.println("8.- SACO CARTER II AZUL DONATELLI S/ 359.90");
+        System.out.println("9.- PANTALON SANTINO AZUL DONATELLI S/ 115.90");
+        System.out.println("10.- PANTALON SANTINO GRIS DONATELLI S/ 115.90");
+        System.out.println("11.- Salir");
+        opcion = sc.nextInt();
+        return opcion;
+    }
+    public static String productoFormal(int opcion) {
+        String producto = "";
+        switch (opcion) {
+            case 1:
+                producto = "TERNO DANE II AZUL JOHN HOLDEN";
+                break;
+            case 2:
+                producto = "TERNO NERO JOHN HOLDEN";
+                break;
+            case 3:
+                producto = "TERNO ALFRED MINIMATE NEGRO DONATELLI";
+                break;
+            case 4:
+                producto = "CAMISA ALESSANDRO NEGRO DONATELLI";
+                break;
+            case 5:
+                producto = "CAMISA MILEY COMFORT ROSADO JOHN HOLDEN";
+                break;
+            case 6:
+                producto = "CAMISA ML VANCOUVER 100% ALGODÓN BLANCO VAN HEUSEN";
+                break;
+            case 7:
+                producto = "SACO PAOLO CORDUROY AZUL MARINO DONATELLI";
+                break;
+            case 8:
+                producto = "SACO CARTER II AZUL DONATELLI";
+                break;
+            case 9:
+                producto = "PANTALON SANTINO AZUL DONATELLI";
+                break;
+            case 10:
+                producto = "PANTALON SANTINO GRIS DONATELLI";
+                break;
+            case 11:
+                System.out.println("saliendo...");
+                break;
+            default:
+                System.out.println("Opcion invalida");
+        }
+        return producto;
+    }
+    public static double precioFormal(Scanner sc,int opcion){
+        double precio = 0;
+        switch (opcion){
+            case 1:
+                precio = 599.90;
+                break;
+            case 2:
+                precio = 349.00;
+                break;
+            case 3:
+                precio = 299.90;
+                break;
+            case 4:
+                precio = 49.90;
+                break;
+            case 5:
+                precio = 169.90;
+                break;
+            case 6:
+                precio = 279.90;
+                break;
+            case 7:
+                precio = 249.90;
+                break;
+            case 8:
+                precio = 359.90;
+                break;
+            case 9:
+                precio = 115.90;
+                break;
+            case 10:
+                precio = 115.90;
+                break;
+            case 11:
+                categorias(sc);
+                precio = 0;
+                break;
+        }
+        return precio;
     }
     public static int casual(Scanner sc){
         int opcion;
@@ -220,7 +354,7 @@ public class TIENDAS_EL_1 {
                 break;
             case 11:
                 categorias(sc);
-                return 0;
+                precio = 0;
             default:
                 System.out.println("Opcion invalida");
                 break;
@@ -268,6 +402,9 @@ public class TIENDAS_EL_1 {
             case 10:
                 producto ="SHORT FIOR III VERDE DONATELLI";
 
+                break;
+            case 11:
+                System.out.println("saliendo...");
                 break;
 
             default:
@@ -410,22 +547,12 @@ public class TIENDAS_EL_1 {
         }
         return talla;
     }
-    public static int seleccionmetodoP(Scanner sc,double total,String producto,String talla){
+    public static int seleccionmetodoP(Scanner sc){
         int opcion;
         System.out.println("selccione el metodo de pago");
         System.out.println("1: efectivo");
         System.out.println("2: tarjeta");
         opcion = sc.nextInt();
-        switch (opcion){
-            case 1:
-                pagoEfectivo(sc,total,producto,talla);
-                break;
-            case 2:
-                pagoTARJETA(sc, total,producto,talla);
-                break;
-            default:
-                System.out.println("Opcion invalida");
-        }
         return opcion;
     }
     public static String nombreMetodoPago(int opcion){
@@ -440,7 +567,7 @@ public class TIENDAS_EL_1 {
         }
         return metodoPago;
     }
-    public static void pagoTARJETA(Scanner sc,double total,String producto,String talla){
+    public static void pagoTARJETA(Scanner sc,double total,String producto,String talla,String metodoPago){
         double igv;
         double subTotal;
         double vuelto = 0;
@@ -484,7 +611,7 @@ public class TIENDAS_EL_1 {
                     System.out.println("TRANSACCION EXITOSA");
                     igv = total * 0.18;
                     subTotal = total - igv;
-                    boleta(total,igv,subTotal,monto,vuelto,producto,talla,codigoPAGO);
+                    boleta(total,igv,subTotal,monto,vuelto,producto,talla,codigoPAGO,metodoPago);
                     paAPROBADO=true;
                     System.exit(0);
                 }else {
@@ -507,7 +634,7 @@ public class TIENDAS_EL_1 {
             }
         }while (!paAPROBADO);
     }
-    public static void pagoEfectivo(Scanner sc,double total,String producto,String talla){
+    public static void pagoEfectivo(Scanner sc,double total,String producto,String talla,String metodoPago){
         double vuelto=0,igv=0,subTotal=0;
         Random numrandom=new Random();
         int opcion;
@@ -528,7 +655,7 @@ public class TIENDAS_EL_1 {
                 opcion=sc.nextInt();
                 if (opcion==1){
                     System.out.println("SU BOLETA ELECTRONICA");
-                    boleta(subTotal,total,igv,monto,vuelto,producto,talla,codigoPAGO);
+                    boleta(subTotal,total,igv,monto,vuelto,producto,talla,codigoPAGO,metodoPago);
                     System.exit(0);
                 }else {
                     System.out.println("RECOJA SU PEDIDO LO ANTES POSIBLE");
@@ -538,7 +665,7 @@ public class TIENDAS_EL_1 {
             System.out.println("MONTO INCOMPLETO");
         }
     }
-    public static void boleta(double subtotal,double total,double igv,double monto,double vuelto, String producto, String talla,int codigoPAGO){
+    public static void boleta(double subtotal,double total,double igv,double monto,double vuelto, String producto, String talla,int codigoPAGO,String metodoPago){
         System.out.println("------------------------------");
         System.out.println("          TIENDAS ÉL          ");
         System.out.println(" ROPA Y ACCESORIOS PARA VARÓN ");
@@ -547,6 +674,7 @@ public class TIENDAS_EL_1 {
         System.out.println("BOLETA DE VENTA ELECTRÓNICA");
         System.out.println("------------------------------");
         System.out.println("CODIGO DE PAGO: "+codigoPAGO);
+        System.out.println("METODO DE PAGO: "+metodoPago);
         System.out.println("PRODUCTO: " + producto);
         System.out.println("TALLA: " + talla);
         System.out.println("MONTO DE PAGO: S/"+monto);
@@ -557,6 +685,9 @@ public class TIENDAS_EL_1 {
         System.out.println("===============================");
         System.out.println("   ¡GRACIAS POR SU COMPRA!");
         System.out.println("===============================");
+
+
+
     }
 }
 
