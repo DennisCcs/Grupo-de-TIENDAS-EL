@@ -167,6 +167,18 @@ public class Tiendas_el {
                 System.out.println("total a pagar es: "+total);
                 break;
             case 3:
+                int ropaIN = ropaINTERIOR(sc);
+                producto = productoROPAinterior(ropaIN);
+                precio= precioROPAinterior(sc,ropaIN);
+                if (precio == 0){
+                    return;
+                }
+                System.out.println("precio "+precio);
+                System.out.println("producto "+producto);
+                talla = talla(sc);
+                total = subTotal(sc,precio);
+
+                System.out.println("total a pagar es: "+total);
                 break;
             case 4:
                 int opcionACCESORIO=accesorios(sc);
@@ -407,6 +419,64 @@ public class Tiendas_el {
                 System.out.println("saliendo...");
                 break;
 
+            default:
+                System.out.println("Opcion invalida");
+                break;
+        }
+        return producto;
+    }
+    public static int ropaINTERIOR(Scanner sc){
+        System.out.println("=== BOXER ===");
+        System.out.println("1: BOXER HUDSON SURTIDO NEGRO JOHN HOLDEN S/ 89.90");
+        System.out.println("2: BOXER 3PACK MARTINO MEL/GRIS/NEG JOHN HOLDEN UNDERWEAR S/ 79.90");
+        System.out.println("3: BOXER 3PACK MARTINO AZUL MARINO JOHN HOLDEN UNDERWEAR S/ 79.90");
+        System.out.println("4: BOXER TRIPACK MASSIMO SURTIDO COLOR DONATELLI S/ 49.90");
+        System.out.println("5: BOXER HUDSON SURTIDO AZUL JOHN HOLDEN S/ 89.90");
+        int opcion = sc.nextInt();
+        return opcion;
+    }
+    public static double precioROPAinterior(Scanner sc, int opcion){
+        double precio=0;
+        switch (opcion) {
+            case 1:
+                precio = 89.90;
+                break;
+            case 2:
+                precio = 79.90;
+                break;
+            case 3:
+                precio = 79.90;
+                break;
+            case 4:
+                precio = 49.90;
+                break;
+            case 5:
+                precio = 89.90;
+                break;
+            default:
+                System.out.println("Opcion invalida");
+        }
+        return precio;
+
+    }
+    public static String productoROPAinterior(int opcion){
+        String producto="";
+        switch (opcion){
+            case 1:
+                producto = " BOXER HUDSON SURTIDO NEGRO JOHN HOLDEN";
+                break;
+            case 2:
+                producto ="BOXER 3PACK MARTINO MEL/GRIS/NEG JOHN HOLDEN UNDERWEAR";
+                break;
+            case 3:
+                producto ="BOXER 3PACK MARTINO AZUL MARINO JOHN HOLDEN UNDERWEAR";
+                break;
+            case 4:
+                producto ="BOXER TRIPACK MASSIMO SURTIDO COLOR DONATELLI";
+                break;
+            case 5:
+                producto ="BOXER HUDSON SURTIDO AZUL JOHN HOLDEN";
+                break;
             default:
                 System.out.println("Opcion invalida");
                 break;
