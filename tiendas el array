@@ -4,14 +4,31 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Random;
 import java.util.ArrayList;
-public class tiendasEL {
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.File;
+
+public class tienasel {
     static Scanner sc = new Scanner(System.in);
     static ArrayList<String> menus = new ArrayList<>();
-    static ArrayList<String> productos = new ArrayList<>();
-    static ArrayList<Double> precioPRODUCTOS = new ArrayList<>();
+
+    static ArrayList<String> productosFormal = new ArrayList<>();
+    static ArrayList<Double> preciosFormal = new ArrayList<>();
+
+    static ArrayList<String> productosCasual = new ArrayList<>();
+    static ArrayList<Double> preciosCasual = new ArrayList<>();
+
+    static ArrayList<String> productosRopaInterior = new ArrayList<>();
+    static ArrayList<Double> preciosRopaInterior = new ArrayList<>();
+
+    static ArrayList<String> productosAccesorios = new ArrayList<>();
+    static ArrayList<Double> preciosAccesorios = new ArrayList<>();
+
     static ArrayList<String> tallasDISPONIBLES = new ArrayList<>();
     static int indicePromocion = -1;
+    static int categoriaPromocion = -1;
     static double descuentoPromo = 15.0;
+
     static ArrayList<String> carritoNombres = new ArrayList<>();
     static ArrayList<Double> carritoPrecios = new ArrayList<>();
     static ArrayList<Integer> carritoCantidad = new ArrayList<>();
@@ -19,8 +36,10 @@ public class tiendasEL {
     static String usuarioACTIVO = "invitado";
     static String[] usuarios = new String[20];
     static String[] contraseñas = new String[20];
-    static String[] correos = new String[100];
+    static String[] correos = new String[20];
     static boolean esADMIN = false;
+    static final String RUTA_CARPETA = "C:TiendasEL_Boletas";
+
     static void cargarDatos() {
         menus.add("1.- Formal");
         menus.add("2.- Casual");
@@ -28,62 +47,68 @@ public class tiendasEL {
         menus.add("4.- Accesorio");
         menus.add("5.- Salir");
 
-        // --- PRODUCTOS FORMAL ---
-        productos.add("TERNO DANE II AZUL JOHN HOLDEN"); precioPRODUCTOS.add(599.90);
-        productos.add("TERNO NERO JOHN HOLDEN"); precioPRODUCTOS.add(349.00);
-        productos.add("TERNO ALFRED MINIMATE NEGRO DONATELLI"); precioPRODUCTOS.add(299.90);
-        productos.add("CAMISA ALESSANDRO NEGRO DONATELLI"); precioPRODUCTOS.add(49.90);
-        productos.add("CAMISA MILEY COMFORT ROSADO JOHN HOLDEN"); precioPRODUCTOS.add(169.90);
-        productos.add("CAMISA ML VANCOUVER 100% ALGODÓN BLANCO VAN HEUSEN"); precioPRODUCTOS.add(279.90);
-        productos.add("SACO PAOLO CORDUROY AZUL MARINO DONATELLI"); precioPRODUCTOS.add(249.90);
-        productos.add("SACO CARTER II AZUL DONATELLI"); precioPRODUCTOS.add(359.90);
-        productos.add("PANTALON SANTINO AZUL DONATELLI"); precioPRODUCTOS.add(115.90);
-        productos.add("PANTALON SANTINO GRIS DONATELLI"); precioPRODUCTOS.add(115.90);
+        productosFormal.add("TERNO DANE II AZUL JOHN HOLDEN"); preciosFormal.add(599.90);
+        productosFormal.add("TERNO NERO JOHN HOLDEN"); preciosFormal.add(349.00);
+        productosFormal.add("TERNO ALFRED MINIMATE NEGRO DONATELLI"); preciosFormal.add(299.90);
+        productosFormal.add("CAMISA ALESSANDRO NEGRO DONATELLI"); preciosFormal.add(49.90);
+        productosFormal.add("CAMISA MILEY COMFORT ROSADO JOHN HOLDEN"); preciosFormal.add(169.90);
+        productosFormal.add("CAMISA ML VANCOUVER 100% ALGODÓN BLANCO VAN HEUSEN"); preciosFormal.add(279.90);
+        productosFormal.add("SACO PAOLO CORDUROY AZUL MARINO DONATELLI"); preciosFormal.add(249.90);
+        productosFormal.add("SACO CARTER II AZUL DONATELLI"); preciosFormal.add(359.90);
+        productosFormal.add("PANTALON SANTINO AZUL DONATELLI"); preciosFormal.add(115.90);
+        productosFormal.add("PANTALON SANTINO GRIS DONATELLI"); preciosFormal.add(115.90);
 
-        // --- PRODUCTOS CASUAL ---
-        productos.add("CAMISA ML DRILL IGOR VERDE"); precioPRODUCTOS.add(79.90);
-        productos.add("CAMISA RAUL CON TEJIDO ELÁSTICO BLANCO"); precioPRODUCTOS.add(139.90);
-        productos.add("CAMISA MC GABO ROSADO DONATELLI"); precioPRODUCTOS.add(80.90);
-        productos.add("CAMISA ML SFILATA CELESTE DONATELLI"); precioPRODUCTOS.add(109.90);
-        productos.add("SACO PAOLO CORDUROY AZUL MARINO DONATELLI"); precioPRODUCTOS.add(249.90);
-        productos.add("SACO RENATO II AZUL JOHN"); precioPRODUCTOS.add(399.90);
-        productos.add("POLO DUCATI 100% ALGODON VINO DONATELLI"); precioPRODUCTOS.add(49.90);
-        productos.add("PANTALÓN ADRIANO NEGRO DONATELLI"); precioPRODUCTOS.add(89.90);
-        productos.add("PANTALÓN JEAN DEREK CELESTE DONATELLI"); precioPRODUCTOS.add(39.90);
-        productos.add("SHORT FIOR III VERDE DONATELLI"); precioPRODUCTOS.add(59.90);
+        productosCasual.add("CAMISA ML DRILL IGOR VERDE"); preciosCasual.add(79.90);
+        productosCasual.add("CAMISA RAUL CON TEJIDO ELÁSTICO BLANCO"); preciosCasual.add(139.90);
+        productosCasual.add("CAMISA MC GABO ROSADO DONATELLI"); preciosCasual.add(80.90);
+        productosCasual.add("CAMISA ML SFILATA CELESTE DONATELLI"); preciosCasual.add(109.90);
+        productosCasual.add("SACO PAOLO CORDUROY AZUL MARINO DONATELLI"); preciosCasual.add(249.90);
+        productosCasual.add("SACO RENATO II AZUL JOHN"); preciosCasual.add(399.90);
+        productosCasual.add("POLO DUCATI 100% ALGODON VINO DONATELLI"); preciosCasual.add(49.90);
+        productosCasual.add("PANTALÓN ADRIANO NEGRO DONATELLI"); preciosCasual.add(89.90);
+        productosCasual.add("PANTALÓN JEAN DEREK CELESTE DONATELLI"); preciosCasual.add(39.90);
+        productosCasual.add("SHORT FIOR III VERDE DONATELLI"); preciosCasual.add(59.90);
 
-        // --- ROPA INTERIOR ---
-        productos.add("BOXER 3PACK MARTINO GRIS JOHN HOLDEN UNDERWEAR"); precioPRODUCTOS.add(79.90);
-        productos.add("BOXER HUDSON SURTIDO AZUL JOHN HOLDEN"); precioPRODUCTOS.add(89.90);
-        productos.add("BIKINI 3PACK SURTIDO COLOR BLANCO DONATELLI"); precioPRODUCTOS.add(39.90);
-        productos.add("BIKINI TRIPACK SURTIDO NEGRO JOHN HOLDEN"); precioPRODUCTOS.add(54.90);
-        productos.add("BIKINI TRIPACK SURTIDO AZUL JOHN HOLDEN"); precioPRODUCTOS.add(54.90);
-        productos.add("TRIPACK MEDIAS NEGRO DONATELLI"); precioPRODUCTOS.add(22.90);
-        productos.add("TRIPACK MEDIAS FORMALES SURTIDO MARRON JOHN HOLDEN"); precioPRODUCTOS.add(24.90);
-        productos.add("PACK x 5 MEDIAS DE BAMBU MARCIAL SURTIDO COLOR JOHN HOLDEN"); precioPRODUCTOS.add(79.90);
-        productos.add("CAMISETA QUINS BLANCO JOHN HOLDEN"); precioPRODUCTOS.add(49.90);
-        productos.add("BVD PACK X 3 100% ALGODÓN BLANCO DONATELLI"); precioPRODUCTOS.add(59.90);
+        productosRopaInterior.add("BOXER 3PACK MARTINO GRIS JOHN HOLDEN UNDERWEAR"); preciosRopaInterior.add(79.90);
+        productosRopaInterior.add("BOXER HUDSON SURTIDO AZUL JOHN HOLDEN"); preciosRopaInterior.add(89.90);
+        productosRopaInterior.add("BIKINI 3PACK SURTIDO COLOR BLANCO DONATELLI"); preciosRopaInterior.add(39.90);
+        productosRopaInterior.add("BIKINI TRIPACK SURTIDO NEGRO JOHN HOLDEN"); preciosRopaInterior.add(54.90);
+        productosRopaInterior.add("BIKINI TRIPACK SURTIDO AZUL JOHN HOLDEN"); preciosRopaInterior.add(54.90);
+        productosRopaInterior.add("TRIPACK MEDIAS NEGRO DONATELLI"); preciosRopaInterior.add(22.90);
+        productosRopaInterior.add("TRIPACK MEDIAS FORMALES SURTIDO MARRON JOHN HOLDEN"); preciosRopaInterior.add(24.90);
+        productosRopaInterior.add("PACK x 5 MEDIAS DE BAMBU MARCIAL SURTIDO COLOR JOHN HOLDEN"); preciosRopaInterior.add(79.90);
+        productosRopaInterior.add("CAMISETA QUINS BLANCO JOHN HOLDEN"); preciosRopaInterior.add(49.90);
+        productosRopaInterior.add("BVD PACK X 3 100% ALGODÓN BLANCO DONATELLI"); preciosRopaInterior.add(59.90);
 
-        // --- ACCESORIOS ---
-        productos.add("MOCHILA EDWARD 3MCHD047 NEGRO (DONATELLI)"); precioPRODUCTOS.add(99.90);
-        productos.add("CORBATA MICHI (DONATELLI)"); precioPRODUCTOS.add(29.99);
-        productos.add("CORBATERO PLATA (DONATELLI)"); precioPRODUCTOS.add(14.90);
-        productos.add("TIRANTE LIAM NEGRO (JOHN HOLDEN)"); precioPRODUCTOS.add(79.90);
-        productos.add("CORREA 3BPF0024 MARRON/NEGRO (DONATELLI)"); precioPRODUCTOS.add(44.90);
-        productos.add("CORREA 3BPD0012 REVERSIBLE NEGRO/MARRÓN (DONATELLI)"); precioPRODUCTOS.add(59.90);
-        productos.add("RELOJ METAL 3WDCM704 SILVER (DONATELLI)"); precioPRODUCTOS.add(75.90);
-        productos.add("RELOJ PU VALERIO NEGRO (JOHN HOLDEN)"); precioPRODUCTOS.add(99.90);
-        productos.add("RELOJ PU OSCAR MARRON OSCURO (JOHN HOLDEN)"); precioPRODUCTOS.add(99.90);
-        productos.add("RELOJ METAL DUSTIN SILVER (JOHN HOLDEN)"); precioPRODUCTOS.add(99.90);
+        productosAccesorios.add("MOCHILA EDWARD 3MCHD047 NEGRO (DONATELLI)"); preciosAccesorios.add(99.90);
+        productosAccesorios.add("CORBATA MICHI (DONATELLI)"); preciosAccesorios.add(29.99);
+        productosAccesorios.add("CORBATERO PLATA (DONATELLI)"); preciosAccesorios.add(14.90);
+        productosAccesorios.add("TIRANTE LIAM NEGRO (JOHN HOLDEN)"); preciosAccesorios.add(79.90);
+        productosAccesorios.add("CORREA 3BPF0024 MARRON/NEGRO (DONATELLI)"); preciosAccesorios.add(44.90);
+        productosAccesorios.add("CORREA 3BPD0012 REVERSIBLE NEGRO/MARRÓN (DONATELLI)"); preciosAccesorios.add(59.90);
+        productosAccesorios.add("RELOJ METAL 3WDCM704 SILVER (DONATELLI)"); preciosAccesorios.add(75.90);
+        productosAccesorios.add("RELOJ PU VALERIO NEGRO (JOHN HOLDEN)"); preciosAccesorios.add(99.90);
+        productosAccesorios.add("RELOJ PU OSCAR MARRON OSCURO (JOHN HOLDEN)"); preciosAccesorios.add(99.90);
+        productosAccesorios.add("RELOJ METAL DUSTIN SILVER (JOHN HOLDEN)"); preciosAccesorios.add(99.90);
 
-        // --- TALLAS ---
         tallasDISPONIBLES.add("S");
         tallasDISPONIBLES.add("M");
         tallasDISPONIBLES.add("L");
 
-        // --- ASIGNAR PRODUCTO ALEATORIO PARA PROMOCIÓN ---
         Random rand = new Random();
-        indicePromocion = rand.nextInt(productos.size());
+        categoriaPromocion = rand.nextInt(4);
+        switch(categoriaPromocion){
+            case 0: indicePromocion = rand.nextInt(productosFormal.size()); break;
+            case 1: indicePromocion = rand.nextInt(productosCasual.size()); break;
+            case 2: indicePromocion = rand.nextInt(productosRopaInterior.size()); break;
+            case 3: indicePromocion = rand.nextInt(productosAccesorios.size()); break;
+        }
+
+        // Crear carpeta para guardar boletas si no existe
+        File carpeta = new File(RUTA_CARPETA);
+        if (!carpeta.exists()) {
+            carpeta.mkdirs();
+        }
     }
     public static void main(String[] args) {
         cargarDatos();
@@ -120,7 +145,7 @@ public class tiendasEL {
                     registrarse();
                     break;
                 case 3:
-
+                    categorias();
                     break;
                 case 4:if (esADMIN) meun_admin(); break;
                 default:
@@ -131,9 +156,9 @@ public class tiendasEL {
     }
     public static void iniciarSeccion() {
         System.out.println("===== INICIO DE SESION =====");
-        System.out.println("Correo: ");
+        System.out.print("Correo: ");
         String correo = sc.nextLine();
-        System.out.println("Contraseña: ");
+        System.out.print("Contraseña: ");
         String contraseña = sc.nextLine();
         if (correo.equals("admin@tiendasel.com") && contraseña.equals("admin1234")) {
             System.out.println("✅ Bienvenido ADMINISTRADOR");
@@ -143,7 +168,6 @@ public class tiendasEL {
             return;
         }
 
-        // Buscar usuario normal registrado
         for (int i = 0; i < correos.length; i++) {
             if (correos[i] != null && correos[i].equals(correo) && contraseñas[i].equals(contraseña)) {
                 usuarioACTIVO = usuarios[i];
@@ -157,11 +181,11 @@ public class tiendasEL {
     }
     public static void registrarse() {
         System.out.println("===== REGISTRO =====");
-        System.out.println("Ingrese su nombre: ");
+        System.out.print("Ingrese su nombre: ");
         String usuario = sc.nextLine();
-        System.out.println("Ingrese su correo: ");
+        System.out.print("Ingrese su correo: ");
         String correo = sc.nextLine();
-        System.out.println("Ingrese su contraseña: ");
+        System.out.print("Ingrese su contraseña: ");
         String contraseña = sc.nextLine();
 
         boolean estructuraCorreoOk = correo.contains("@") && correo.endsWith(".com");
@@ -191,31 +215,32 @@ public class tiendasEL {
         while (volver) {
             System.out.println("---- CATEGORÍAS ----");
             for (String cat : menus) System.out.println(cat);
-            System.out.println("6. VER CARRITO Y PAGAR");
-            System.out.println("7. BUSCAR PRODUCTO");
-            System.out.println("8. FILTRAR POR PRECIO");
-            System.out.println("9. VER PRODUCTO EN PROMOCIÓN");
+            System.out.println("0.- VER CARRITO Y PAGAR");
+            System.out.println("6.- BUSCAR PRODUCTO");
+            System.out.println("7.- FILTRAR POR PRECIO");
+            System.out.println("8.- VER PRODUCTO EN PROMOCIÓN");
             if (esADMIN) {
-                System.out.println("10. AÑADIR NUEVO PRODUCTO");
-                System.out.println("11. ELIMINAR PRODUCTO EXISTENTE");
+                System.out.println("9.- AÑADIR NUEVO PRODUCTO");
+                System.out.println("10.- ELIMINAR PRODUCTO EXISTENTE");
             }
+            System.out.print("Elija opción: ");
             opcion = sc.nextInt();
             sc.nextLine();
             switch (opcion) {
-                case 1: mostrarProductos(0, 10); break;
-                case 2: mostrarProductos(10, 20); break;
-                case 3: mostrarProductos(20, 30); break;
-                case 4: mostrarProductos(30, 40); break;
+                case 0: verCarrito(); break;
+                case 1: mostrarProductos(productosFormal, preciosFormal, 0); break;
+                case 2: mostrarProductos(productosCasual, preciosCasual, 1); break;
+                case 3: mostrarProductos(productosRopaInterior, preciosRopaInterior, 2); break;
+                case 4: mostrarProductos(productosAccesorios, preciosAccesorios, 3); break;
                 case 5: volver = false; break;
-                case 6: verCarrito(); break;
-                case 7: buscarProducto(); break;
-                case 8: filtrarPorPrecio(); break;
-                case 9: verPromocion(); break;
-                case 10:
+                case 6: buscarProducto(); break;
+                case 7: filtrarPorPrecio(); break;
+                case 8: verPromocion(); break;
+                case 9:
                     if (esADMIN) agregarProductoAdmin();
                     else System.out.println("Opción no disponible");
                     break;
-                case 11:
+                case 10:
                     if (esADMIN) eliminarProductoAdmin();
                     else System.out.println("Opción no disponible");
                     break;
@@ -223,18 +248,22 @@ public class tiendasEL {
             }
         }
     }
-    public static void mostrarProductos(int inicio, int fin) {
+    public static void mostrarProductos(ArrayList<String> listaProd, ArrayList<Double> listaPrec, int catActual) {
         System.out.println("--- PRODUCTOS ---");
-        for (int i = inicio; i < fin; i++) {
-            if (i < productos.size()) {
-                double precioFinal = precioPRODUCTOS.get(i);
-                if (i == indicePromocion) {
-                    double precioDesc = precioFinal - (precioFinal * descuentoPromo / 100);
-                    System.out.printf("%d. %s - S/ %.2f 🔥 PROMOCIÓN: S/ %.2f (%d%% dscto)%n",
-                            (i - inicio + 1), productos.get(i), precioFinal, precioDesc, (int)descuentoPromo);
-                } else {
-                    System.out.println((i - inicio + 1) + ". " + productos.get(i) + " - S/ " + precioFinal);
-                }
+        for (int i = 0; i < listaProd.size(); i++) {
+            double precioFinal = listaPrec.get(i);
+            if (catActual == categoriaPromocion && i == indicePromocion) {
+                double precioDesc = precioFinal - (precioFinal * descuentoPromo / 100);
+                System.out.printf("%d. %s - S/ %.2f 🔥 PROMOCIÓN: S/ %.2f (%d%% dscto)%n",
+                        (i+1), listaProd.get(i), precioFinal, precioDesc, (int)descuentoPromo);
+
+                //%d → Aquí va un número entero (ej: posición, porcentaje).
+                //%s → Aquí va un texto (ej: nombre del producto).
+                //%.2f → Aquí va un número decimal, y lo obliga a mostrar siempre 2 decimales (ej: 599.90).
+                //%n → Es un salto de línea.
+
+            } else {
+                System.out.printf("%d. %s - S/ %.2f%n", (i+1), listaProd.get(i), precioFinal);
             }
         }
         System.out.println("0. Volver");
@@ -243,33 +272,75 @@ public class tiendasEL {
         sc.nextLine();
 
         if (opc == 0) return;
-        int indiceReal = inicio + (opc - 1);
+        int indiceReal = opc - 1;
 
-        if (indiceReal >= inicio && indiceReal < fin) {
-            agregarAlCarrito(indiceReal);
+        if (indiceReal >= 0 && indiceReal < listaProd.size()) {
+            agregarAlCarrito(listaProd, listaPrec, indiceReal, catActual);
         } else {
             System.out.println("Opción incorrecta");
         }
     }
-    public static void buscarProducto(){
+    public static void agregarAlCarrito(ArrayList<String> listaProd, ArrayList<Double> listaPrec, int indice, int catActual) {
+        double precioUnitario = listaPrec.get(indice);
+        if (catActual == categoriaPromocion && indice == indicePromocion) {
+            precioUnitario = precioUnitario - (precioUnitario * descuentoPromo / 100);
+        }
+
+        System.out.println("Producto: " + listaProd.get(indice));
+        System.out.printf("Precio a pagar: S/ %.2f%n", precioUnitario);
+
+        String tallaElegida;
+        if (catActual == 3) {
+            tallaElegida = "Sin talla";
+            System.out.println("✅ Producto sin talla disponible");
+        } else {
+            System.out.println("Elija talla:");
+            for (int i = 0; i < tallasDISPONIBLES.size(); i++)
+                System.out.println((i + 1) + ". " + tallasDISPONIBLES.get(i));
+            System.out.print("Opción: ");
+            int tallaOpc = sc.nextInt();
+            sc.nextLine();
+            tallaElegida = (tallaOpc >= 1 && tallaOpc <= tallasDISPONIBLES.size()) ? tallasDISPONIBLES.get(tallaOpc - 1) : "Única";
+        }
+
+        System.out.print("Cantidad: ");
+        int cant = sc.nextInt();
+        sc.nextLine();
+
+        carritoNombres.add(listaProd.get(indice));
+        carritoPrecios.add(precioUnitario);
+        carritoCantidad.add(cant);
+        carritoTallas.add(tallaElegida);
+        System.out.println("✅ Agregado al carrito correctamente\n");
+    }
+    public static void buscarProducto() {
         System.out.println("🔍 BUSCAR PRODUCTO");
         System.out.print("Ingrese nombre o parte del nombre: ");
         String busqueda = sc.nextLine().toLowerCase();
         boolean encontrado = false;
 
-        for (int i = 0; i < productos.size(); i++) {
-            if (productos.get(i).toLowerCase().contains(busqueda)) {
-                double precio = precioPRODUCTOS.get(i);
-                if (i == indicePromocion) {
+        encontrado |= buscarEnLista(productosFormal, preciosFormal, 0, busqueda);
+        encontrado |= buscarEnLista(productosCasual, preciosCasual, 1, busqueda);
+        encontrado |= buscarEnLista(productosRopaInterior, preciosRopaInterior, 2, busqueda);
+        encontrado |= buscarEnLista(productosAccesorios, preciosAccesorios, 3, busqueda);
+
+        if (!encontrado) System.out.println("❌ Ningún producto coincide con su búsqueda.");
+    }
+    public static boolean buscarEnLista(ArrayList<String> prod, ArrayList<Double> prec, int cat, String texto){
+        boolean ok = false;
+        for (int i = 0; i < prod.size(); i++) {
+            if (prod.get(i).toLowerCase().contains(texto)) {
+                double precio = prec.get(i);
+                if (cat == categoriaPromocion && i == indicePromocion) {
                     double precioDesc = precio - (precio * descuentoPromo / 100);
-                    System.out.printf("✅ %s - S/ %.2f | 🔥 PROMO: S/ %.2f%n", productos.get(i), precio, precioDesc);
+                    System.out.printf("✅ %s - S/ %.2f | 🔥 PROMO: S/ %.2f%n", prod.get(i), precio, precioDesc);
                 } else {
-                    System.out.printf("✅ %s - S/ %.2f%n", productos.get(i), precio);
+                    System.out.printf("✅ %s - S/ %.2f%n", prod.get(i), precio);
                 }
-                encontrado = true;
+                ok = true;
             }
         }
-        if (!encontrado) System.out.println("❌ Ningún producto coincide con su búsqueda.");
+        return ok;
     }
     public static void filtrarPorPrecio() {
         System.out.println("💰 FILTRAR POR RANGO DE PRECIO");
@@ -281,68 +352,55 @@ public class tiendasEL {
         boolean encontrado = false;
 
         System.out.println("--- RESULTADOS ---");
-        for (int i = 0; i < productos.size(); i++) {
-            double precio = precioPRODUCTOS.get(i);
-            if (precio >= min && precio <= max) {
-                if (i == indicePromocion) {
-                    double precioDesc = precio - (precio * descuentoPromo / 100);
-                    System.out.printf("%s - S/ %.2f 🔥 PROMO: S/ %.2f%n", productos.get(i), precio, precioDesc);
-                } else {
-                    System.out.printf("%s - S/ %.2f%n", productos.get(i), precio);
-                }
-                encontrado = true;
-            }
-        }
+        encontrado |= filtrarLista(productosFormal, preciosFormal, 0, min, max);
+        encontrado |= filtrarLista(productosCasual, preciosCasual, 1, min, max);
+        encontrado |= filtrarLista(productosRopaInterior, preciosRopaInterior, 2, min, max);
+        encontrado |= filtrarLista(productosAccesorios, preciosAccesorios, 3, min, max);
+
         if (!encontrado) System.out.println("❌ No hay productos en ese rango.");
     }
+    public static boolean filtrarLista(ArrayList<String> prod, ArrayList<Double> prec, int cat, double min, double max){
+        boolean ok = false;
+        for (int i = 0; i < prod.size(); i++) {
+            double precio = prec.get(i);
+            if (precio >= min && precio <= max) {
+                if (cat == categoriaPromocion && i == indicePromocion) {
+                    double precioDesc = precio - (precio * descuentoPromo / 100);
+                    System.out.printf("%s - S/ %.2f 🔥 PROMO: S/ %.2f%n", prod.get(i), precio, precioDesc);
+                } else {
+                    System.out.printf("%s - S/ %.2f%n", prod.get(i), precio);
+                }
+                ok = true;
+            }
+        }
+        return ok;
+    }
     public static void verPromocion() {
-        System.out.println("\n⭐ PRODUCTO DESTACADO EN PROMOCIÓN ⭐");
-        if (indicePromocion != -1 && indicePromocion < productos.size()) {
-            double precioOriginal = precioPRODUCTOS.get(indicePromocion);
-            double precioFinal = precioOriginal - (precioOriginal * descuentoPromo / 100);
-            System.out.println("🔥 " + productos.get(indicePromocion));
-            System.out.println("Precio original: S/ " + precioOriginal);
-            System.out.println("Precio con descuento " + (int)descuentoPromo + "%: S/ " + precioFinal);
+        System.out.println("⭐ PRODUCTO DESTACADO EN PROMOCIÓN ⭐");
+        if (indicePromocion != -1) {
+            String nombre = "";
+            double precio = 0.0;
+            switch(categoriaPromocion){
+                case 0: nombre = productosFormal.get(indicePromocion); precio = preciosFormal.get(indicePromocion); break;
+                case 1: nombre = productosCasual.get(indicePromocion); precio = preciosCasual.get(indicePromocion); break;
+                case 2: nombre = productosRopaInterior.get(indicePromocion); precio = preciosRopaInterior.get(indicePromocion); break;
+                case 3: nombre = productosAccesorios.get(indicePromocion); precio = preciosAccesorios.get(indicePromocion); break;
+            }
+            double precioFinal = precio - (precio * descuentoPromo / 100);
+            System.out.println("🔥 " + nombre);
+            System.out.printf("Precio original: S/ %.2f%n", precio);
+            System.out.printf("Precio con descuento %.0f%%: S/ %.2f%n", descuentoPromo, precioFinal);
         } else {
             System.out.println("❌ No hay promociones activas.");
         }
     }
-    public static void agregarAlCarrito(int indice) {
-        double precioUnitario = precioPRODUCTOS.get(indice);
-        // Aplicar descuento si es promoción
-        if (indice == indicePromocion) {
-            precioUnitario = precioUnitario - (precioUnitario * descuentoPromo / 100);
-        }
-
-        System.out.println("Producto: " + productos.get(indice));
-        System.out.println("Precio a pagar: S/ " + precioUnitario);
-
-        // Elegir talla
-        System.out.println("Elija talla:");
-        for (int i = 0; i < tallasDISPONIBLES.size(); i++)
-            System.out.println((i + 1) + ". " + tallasDISPONIBLES.get(i));
-        int tallaOpc = sc.nextInt();
-        sc.nextLine();
-        String tallaElegida = (tallaOpc >= 1 && tallaOpc <= tallasDISPONIBLES.size()) ? tallasDISPONIBLES.get(tallaOpc - 1) : "Única";
-
-        // Elegir cantidad
-        System.out.println("Cantidad:");
-        int cant = sc.nextInt();
-        sc.nextLine();
-
-        // Guardar
-        carritoNombres.add(productos.get(indice));
-        carritoPrecios.add(precioUnitario);
-        carritoCantidad.add(cant);
-        carritoTallas.add(tallaElegida);
-        System.out.println("✅ Agregado al carrito correctamente\n");
-    }
     public static void verCarrito() {
         if (carritoNombres.isEmpty()) {
+            //isEmpy = si el carrito no tiene elementos
             System.out.println("🛒 El carrito está vacío");
             return;
         }
-        System.out.println("\n===== TU CARRITO =====");
+        System.out.println("===== TU CARRITO =====");
         double total = 0;
         for (int i = 0; i < carritoNombres.size(); i++) {
             double subt = carritoPrecios.get(i) * carritoCantidad.get(i);
@@ -353,14 +411,16 @@ public class tiendasEL {
         System.out.printf("-------------------------%nTOTAL A PAGAR: S/ %.2f%n", total);
         System.out.println("1. Proceder al pago");
         System.out.println("2. Volver");
+        System.out.print("Opción: ");
         int opc = sc.nextInt();
         sc.nextLine();
         if (opc == 1) seleccionMetodoPago(total);
     }
     public static void seleccionMetodoPago(double total) {
-        System.out.println("\n--- MÉTODO DE PAGO ---");
+        System.out.println("--- MÉTODO DE PAGO ---");
         System.out.println("1. Efectivo");
         System.out.println("2. Tarjeta");
+        System.out.print("Opción: ");
         int opc = sc.nextInt();
         sc.nextLine();
         if (opc == 1) pagoEfectivo(total);
@@ -370,7 +430,7 @@ public class tiendasEL {
         Random rand = new Random();
         int cod = 100000 + rand.nextInt(900000);
         System.out.println("Código de pago: " + cod);
-        System.out.println("Total: S/ " + total);
+        System.out.printf("Total: S/ %.2f%n", total);
         System.out.print("Ingrese monto recibido: S/ ");
         double pago = sc.nextDouble();
         sc.nextLine();
@@ -382,7 +442,7 @@ public class tiendasEL {
             System.out.println("✅ Pago realizado");
             boleta(subtotal, total, igv, pago, vuelto, cod, "Efectivo");
         } else {
-            System.out.println("Monto insuficiente");
+            System.out.println("❌ Monto insuficiente");
         }
     }
     public static void pagoTarjeta(double total) {
@@ -390,7 +450,7 @@ public class tiendasEL {
         double montoAPAGAR = total;
         do {
             System.out.println("PAGO CON TARJETA\n" +
-                    "INGRESAR LOS 16 DIJITOS DE SU TARJETA");
+                    "INGRESAR LOS 16 DÍGITOS DE SU TARJETA");
             String dijitos= sc.nextLine();
             System.out.println("INGRESAR FECHA DE VENCIMIENTO (MM/AA)");
             String fechaVENCIMIENTO= sc.nextLine();
@@ -406,7 +466,7 @@ public class tiendasEL {
                 try{
                     DateTimeFormatter formateador=DateTimeFormatter.ofPattern("MM/yy");
                     YearMonth fechaTARJETA=YearMonth.parse(fechaVENCIMIENTO,formateador);
-                    YearMonth fechaACTUAL=YearMonth.now();//now=ahora
+                    YearMonth fechaACTUAL=YearMonth.now();
                     if (fechaTARJETA.isAfter(fechaACTUAL)||fechaTARJETA.equals(fechaACTUAL)){
                         fechaNOvencida=true;
                     }
@@ -428,7 +488,7 @@ public class tiendasEL {
                 System.out.println("OPERACION DENEGADA POR LA PASARELA BANCARIA");
             }
             if (!tarjetaOK){
-                System.out.println("EL NUMERO DE SU TARJETA DEBE CONTENER 16 DIGITOS");
+                System.out.println("EL NÚMERO DE SU TARJETA DEBE CONTENER 16 DÍGITOS");
             }
             if (!fechaESTRUCTURAok){
                 System.out.println("FORMATO DE FECHA INCORRECTO");
@@ -437,85 +497,146 @@ public class tiendasEL {
                 System.out.println("FECHA DE SU TARJETA CADUCADA");
             }
             if (!cvvOK){
-                System.out.println("EL CVV DEBE TENER 3 DIJITOS");
+                System.out.println("EL CVV DEBE TENER 3 DÍGITOS");
             }
             if (!pagoEXITOSO){
-                System.out.println("INTENTE NUEVAMENTE EL PAGO ELECTRONICO");
+                System.out.println("INTENTE NUEVAMENTE EL PAGO ELECTRÓNICO");
             }
         }while (!pagoEXITOSO);
     }
     public static void boleta(double subtotal, double total, double igv, double monto, double vuelto, int codPago, String metodo) {
-        System.out.println("\n------------------------------");
-        System.out.println("          TIENDAS EL          ");
-        System.out.println(" ROPA Y ACCESORIOS PARA VARÓN ");
-        System.out.println("------------------------------");
-        System.out.println("RUC: 20100123456");
-        System.out.println("BOLETA DE VENTA ELECTRÓNICA");
-        System.out.println("Usuario: " + usuarioACTIVO);
-        System.out.println("CÓDIGO: " + codPago);
-        System.out.println("MÉTODO: " + metodo);
-        System.out.println("--- DETALLE ---");
+        StringBuilder contenido = new StringBuilder();
+        contenido.append("------------------------------\n");
+        contenido.append("          TIENDAS EL          \n");
+        contenido.append(" ROPA Y ACCESORIOS PARA VARÓN \n");
+        contenido.append("------------------------------\n");
+        contenido.append("RUC: 20100123456\n");
+        contenido.append("BOLETA DE VENTA ELECTRÓNICA\n");
+        contenido.append("Usuario: ").append(usuarioACTIVO).append("\n");
+        contenido.append("CÓDIGO: ").append(codPago).append("\n");
+        contenido.append("MÉTODO: ").append(metodo).append("\n");
+        contenido.append("--- DETALLE ---\n");
         for (int i = 0; i < carritoNombres.size(); i++) {
-            System.out.printf("• %s | Talla:%s | Cant:%d | P.U: S/%.2f%n",
-                    carritoNombres.get(i), carritoTallas.get(i), carritoCantidad.get(i), carritoPrecios.get(i));
+            contenido.append(String.format("• %s | Talla:%s | Cant:%d | P.U: S/%.2f%n",
+                    carritoNombres.get(i), carritoTallas.get(i), carritoCantidad.get(i), carritoPrecios.get(i)));
         }
-        System.out.println("------------------------------");
-        System.out.printf("SUBTOTAL: S/ %.2f%n", subtotal);
-        System.out.printf("IGV 18%%: S/ %.2f%n", igv);
-        System.out.printf("MONTO PAGADO: S/ %.2f%n", monto);
-        System.out.printf("VUELTO: S/ %.2f%n", vuelto);
-        System.out.printf("TOTAL: S/ %.2f%n", total);
-        System.out.println("===============================");
-        System.out.println("   ¡GRACIAS POR SU COMPRA!");
-        System.out.println("===============================");
+        contenido.append("------------------------------\n");
+        contenido.append(String.format("SUBTOTAL: S/ %.2f%n", subtotal));
+        contenido.append(String.format("IGV 18%%: S/ %.2f%n", igv));
+        contenido.append(String.format("MONTO PAGADO: S/ %.2f%n", monto));
+        contenido.append(String.format("VUELTO: S/ %.2f%n", vuelto));
+        contenido.append(String.format("TOTAL: S/ %.2f%n", total));
+        contenido.append("===============================\n");
+        contenido.append("   ¡GRACIAS POR SU COMPRA!\n");
+        contenido.append("===============================\n");
+        System.out.println(contenido);
+
+        // ¿.append? Es un metodo que tiene StringBuilder
+
+        // ¿StringBuilder? Es una clase especial de Java diseñada para construir o modificar textos de forma eficiente
+
+        // Guardar en archivo en disco C:
+
+        String nombreArchivo = RUTA_CARPETA + "Boleta_" + codPago + ".txt";
+        try (FileWriter escritor = new FileWriter(nombreArchivo)) {
+            escritor.write(contenido.toString());
+            System.out.println("✅ Boleta guardada correctamente en: " + nombreArchivo);
+        } catch (IOException e) {
+            System.out.println("❌ Error al guardar la boleta: " + e.getMessage());
+        }
+
         System.exit(0);
     }
     public static void meun_admin() {
         int opcionesCRUD = 0;
         while (opcionesCRUD != 3) {
-            System.out.println("\n==== PANEL DE ADMINISTRADOR - TIENDAS EL ====");
-            System.out.println("1.- AÑADIR NUEVO PRODUCTO");
-            System.out.println("2.- ELIMINAR PRODUCTO EXISTENTE");
-            System.out.println("3.- VOLVER AL MENU PRINCIPAL");
+            System.out.println("==== PANEL DE ADMINISTRADOR - TIENDAS EL ====\n" +
+                    "1.- AÑADIR NUEVO PRODUCTO\n" +
+                    "2.- ELIMINAR PRODUCTO EXISTENTE\n" +
+                    "3.- VOLVER AL MENU PRINCIPAL\n" +
+                    "Opción: ");
             opcionesCRUD = sc.nextInt();
             sc.nextLine();
 
             switch (opcionesCRUD) {
                 case 1: agregarProductoAdmin(); break;
                 case 2: eliminarProductoAdmin(); break;
-                case 3: menuPrincipal(); break;
+                case 3: return;
                 default: System.out.println("OPCION INVALIDA"); break;
             }
         }
     }
     public static void agregarProductoAdmin() {
         System.out.println("--- AÑADIR PRODUCTO ---");
+        System.out.println("¿En qué categoría?");
+        System.out.println("1-Formal | 2-Casual | 3-Ropa Interior | 4-Accesorios");
+        System.out.print("Opción: ");
+        int cat = sc.nextInt();
+        sc.nextLine();
+
         System.out.print("Nombre del producto: ");
         String nombre = sc.nextLine();
         System.out.print("Precio S/: ");
         double precio = sc.nextDouble();
         sc.nextLine();
 
-        productos.add(nombre);
-        precioPRODUCTOS.add(precio);
+        switch(cat){
+            case 1: productosFormal.add(nombre); preciosFormal.add(precio); break;
+            case 2: productosCasual.add(nombre); preciosCasual.add(precio); break;
+            case 3: productosRopaInterior.add(nombre); preciosRopaInterior.add(precio); break;
+            case 4: productosAccesorios.add(nombre); preciosAccesorios.add(precio); break;
+            default: System.out.println("❌ Categoría inválida"); return;
+        }
         System.out.println("✅ PRODUCTO AGREGADO CORRECTAMENTE");
+        // Actualizar promoción
         Random rand = new Random();
-        indicePromocion = rand.nextInt(productos.size());
+        categoriaPromocion = rand.nextInt(4);
+        switch(categoriaPromocion){
+            case 0: indicePromocion = rand.nextInt(productosFormal.size()); break;
+            case 1: indicePromocion = rand.nextInt(productosCasual.size()); break;
+            case 2: indicePromocion = rand.nextInt(productosRopaInterior.size()); break;
+            case 3: indicePromocion = rand.nextInt(productosAccesorios.size()); break;
+        }
     }
     public static void eliminarProductoAdmin() {
         System.out.println("--- ELIMINAR PRODUCTO ---");
-        for (int i = 0; i < productos.size(); i++)
-            System.out.printf("[%d] %s - S/ %.2f%n", i, productos.get(i), precioPRODUCTOS.get(i));
+        System.out.println("¿En qué categoría?");
+        System.out.println("1-Formal | 2-Casual | 3-Ropa Interior | 4-Accesorios");
+        System.out.print("Opción: ");
+        int cat = sc.nextInt();
+        sc.nextLine();
+
+        ArrayList<String> lista = null;
+        ArrayList<Double> listaP = null;
+
+        switch(cat){
+            case 1: lista = productosFormal; listaP = preciosFormal; break;
+            case 2: lista = productosCasual; listaP = preciosCasual; break;
+            case 3: lista = productosRopaInterior; listaP = preciosRopaInterior; break;
+            case 4: lista = productosAccesorios; listaP = preciosAccesorios; break;
+            default: System.out.println("❌ Categoría inválida"); return;
+        }
+
+        for (int i = 0; i < lista.size(); i++)
+            System.out.printf("[%d] %s - S/ %.2f%n", i, lista.get(i), listaP.get(i));
         System.out.print("Ingrese el índice a eliminar: ");
         int pos = sc.nextInt();
         sc.nextLine();
-        if (pos >= 0 && pos < productos.size()) {
-            productos.remove(pos);
-            precioPRODUCTOS.remove(pos);
+
+        if (pos >= 0 && pos < lista.size()) {
+            lista.remove(pos);
+            listaP.remove(pos);
             System.out.println("✅ PRODUCTO ELIMINADO");
-            if (pos == indicePromocion) {
+            // Si eliminamos el de promoción, generar nuevo
+            if ((cat-1) == categoriaPromocion && pos == indicePromocion) {
                 Random rand = new Random();
-                indicePromocion = rand.nextInt(productos.size());
+                categoriaPromocion = rand.nextInt(4);
+                switch(categoriaPromocion){
+                    case 0: indicePromocion = rand.nextInt(productosFormal.size()); break;
+                    case 1: indicePromocion = rand.nextInt(productosCasual.size()); break;
+                    case 2: indicePromocion = rand.nextInt(productosRopaInterior.size()); break;
+                    case 3: indicePromocion = rand.nextInt(productosAccesorios.size()); break;
+                }
             }
         } else {
             System.out.println("❌ Índice inválido");
